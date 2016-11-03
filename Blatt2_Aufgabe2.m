@@ -57,7 +57,7 @@ for i = 1:80
     plotgrad4deriv(i) = LagrangeDerivPolynom(x(i), 4, x_node14, f_node14);
     
     plotgrad80(i) =  LagrangePolynom(x(i), 80, x_node80, f_node80);
-    plotgrad80deriv(i) = LagrangeDerivPolynom(x(i), 1, x_node80, f_node80);
+    plotgrad80deriv(i) = LagrangeDerivPolynom(x(i), 80, x_node80, f_node80);
 end
     
 syms z;
