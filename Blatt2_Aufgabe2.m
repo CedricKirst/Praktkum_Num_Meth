@@ -96,6 +96,7 @@ subplot(2,2,4);
 hold on;
 title('grad 80');
 grid on;
+axis([0 4 0 0.35]);
 plot(x, plotgrad80);
 plot(x, plotgrad80deriv);
 hold off;
