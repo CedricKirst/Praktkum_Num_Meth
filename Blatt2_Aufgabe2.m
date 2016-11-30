@@ -2,6 +2,7 @@
 %Aufgabe 2
 
 clc; clear all; close all; format long;
+addpath('Methods');
 
 
 disp('======================Output=======================');
@@ -41,7 +42,7 @@ fL80 =  LagrangePolynom(x, n, x_node80, f_node80);
 fL80_Deriv = LagrangeDerivPolynom(x, n, x_node80, f_node80);
 fprintf('\tfL80 =\t%f\n\tfL80" =\t%f\n\n', fL80, fL80_Deriv);
 
-x = linspace(0.0, 4.0, 80);
+x = linspace(0.0, 4.0, 101);
 plotgrad1 = zeros(80,1);
 plotgrad1deriv = zeros(80,1);
 plotgrad4 = zeros(80,1);
@@ -49,7 +50,7 @@ plotgrad4deriv = zeros(80,1);
 plotgrad80 = zeros(80,1);
 plotgrad80deriv = zeros(80,1);
 
-for i = 1:80
+for i = 1:101
     plotgrad1(i) =  LagrangePolynom(x(i), 1, x_node14, f_node14);
     plotgrad1deriv(i) = LagrangeDerivPolynom(x(i), 1, x_node14, f_node14);
     
@@ -72,35 +73,37 @@ subplot(2,2,1);
 hold on;
 title('Interpolierte Funktion');
 grid on;
+grid minor;
 plot(x, f(x));
 plot(x, df(x));
-hold off;
+hold on;
 
 subplot(2,2,2);
 hold on;
 title('grad 1');
 grid on;
+grid minor;
 plot(x, plotgrad1);
 plot(x, plotgrad1deriv);
-hold off;
+hold on;
 
 subplot(2,2,3);
 hold on;
 title('grad 4');
 grid on;
+grid minor;
 plot(x, plotgrad4);
 plot(x, plotgrad4deriv);
-hold off;
+hold on;
 
 subplot(2,2,4);
 hold on;
 title('grad 80');
 grid on;
+grid minor;
 axis([0 4 0 0.35]);
 plot(x, plotgrad80);
 plot(x, plotgrad80deriv);
-hold off;
-
-
+hold on;
 
 disp('=======================end=========================');

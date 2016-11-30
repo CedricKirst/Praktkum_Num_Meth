@@ -1,9 +1,9 @@
 function quadplot(nodes, elements, sol)
 
-m = length(elements);
-tri = zeros(2*m, 3);
+m = size(elements);
+tri = zeros(2*m(:,1), 3);
 
-for i = 1 : m
+for i = 1 : m(:,1)
     tri(2*i-1, :) = elements(i, 1:3);
     tri(2*i, 1) = elements(i, 3);
     tri(2*i, 2) = elements(i, 4);

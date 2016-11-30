@@ -3,9 +3,9 @@
 
 clc; clear all; close all;
 
-delta = logspace(-20,-5, 100);
+delta = logspace(-20,-5, 1000);
 P2 = zeros(2,1);
-x = zeros(length(delta),1);
+x = zeros(length(delta),1,1000);
 xex = 1;
 xf = zeros(length(delta),1);
 
@@ -22,3 +22,4 @@ end
 
 loglog(delta, xf);
 grid on;
+grid minor;
