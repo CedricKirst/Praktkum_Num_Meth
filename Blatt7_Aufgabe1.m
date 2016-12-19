@@ -1,5 +1,6 @@
 %Blatt 7
 % Aufgabe 1
+
 clc;clear all;close all;
 addpath('Methods');
 r = 0.02;
