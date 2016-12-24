@@ -35,6 +35,10 @@ dt = 500;
 
 for t = 500:dt:5000
     
+    sysmat = zeros(18,18);
+    elevec = zeros(18,1);
+    rhs = zeros(18,1);
+    
     if t==500
         firststep = true;
     else
@@ -43,7 +47,7 @@ for t = 500:dt:5000
     
     for e = 1:l
         elenodes = nodes(elements(e,:),:);
-        [ elemat, elevec ] = evaluate_instat(elenodes, gx2dref(n), gw2dref(n), T(:,t/500), [], 1 ,dt, 0.5, firststep); 
+        [ elemat, elevec ] = evaluate_instat(elenodes, gx2dref(n), gw2dref(n), T(elements(e,:),t/500), [], 1 ,dt, 0.5, firststep); 
         [ sysmat, rhs ] = assemble( elemat,elevec,sysmat,rhs,elements(e,:) );
     end    
     
@@ -55,8 +59,8 @@ end
 
 
 %% Ausgabe der Temperatur bei t = 5000s
-disp('Lösung');
-fprintf('\nT¹⁰_15\t=\t%f\nT¹⁰_16\t=\t%f\nT¹⁰_17\t=\t%f\nT¹⁰_18\t=\t%f\n', T(15,end), T(16,end), T(17,end), T(18,end)); 
+disp('Lösung bei t = 5000s');
+fprintf('\nT¹⁰_15\t=\t%f\nT¹⁰_16\t=\t%f\nT¹⁰_17\t=\t%f\nT¹⁰_18\t=\t%f\n\n', T(15,end), T(16,end), T(17,end), T(18,end)); 
 
 %% Plot t = 5000s
 
@@ -67,29 +71,53 @@ grid minor;
 
 %% Berechnung der nötigen Zeit für das Kühlen unter 450 K bei y = 0.3
 
-cold = false;
+sysmat_s = zeros(18,18);
+rhs_s = zeros(18,1);
+T_s = zeros(18, 1);
+T_s(:) = 300;
+t_s = 0;
+dt_s = 500;
+
+cold = true;
 for f = 15:18
-    if(T(f, end) > 450)
-        cold = true;
+    if(T_s(f, end) > 450)
+        cold = false;
     end
 end
 
 while(cold)
-    t=t+500;
+    t_s=t_s+dt_s;
+    
+    
+    sysmat_s = zeros(18,18);
+    elevec_s = zeros(18,1);
+    rhs_s = zeros(18,1);
     
     for e = 1:l
         elenodes = nodes(elements(e,:),:);
-        [ elemat, elevec ] = evaluate_instat(elenodes, gx2dref(n), gw2dref(n), T(:,t/500), [], 1 ,dt, 0.5, firststep); 
-        [ sysmat, rhs ] = assemble( elemat,elevec,sysmat,rhs,elements(e,:) );
+        [ elemat, elevec ] = evaluate_instat(elenodes, gx2dref(n), gw2dref(n), T_s(elements(e,:),t_s/dt_s), [], 1 ,dt_s, 0.5, firststep); 
+        [ sysmat_s, rhs_s ] = assemble( elemat,elevec,sysmat_s,rhs_s,elements(e,:) );
     end    
     
-    [ sysmat, rhs ] = assignDBC( sysmat, rhs, dbc );
+    [ sysmat_s, rhs_s ] = assignDBC( sysmat_s, rhs_s, dbc );
 
-    T(:,t/500+1) = sysmat\rhs;
+    T_s(:,t_s/dt_s+1) = sysmat_s\rhs_s;
+    
     
     for f = 15:18
-        if(T(f, end) > 450)
-            cold = true;
+        if(T_s(f, end) > 450)
+            cold = false;
         end
     end
 end
+
+%% Ausgabe der Temperatur
+disp('Lösung bei T <= 450 K');
+fprintf('\nT¹⁰_15\t=\t%f\nT¹⁰_16\t=\t%f\nT¹⁰_17\t=\t%f\nT¹⁰_18\t=\t%f\nZeitpunkt t\t=\t%f\n', T_s(15,end), T_s(16,end), T_s(17,end), T_s(18,end), t_s); 
+
+%% Plot t = 5000s
+
+figure('Name','Temperaturverteilung Platte bei T <= 450 K');
+quadplot(nodes, elements, T_s(:, end));
+grid on;
+grid minor;
