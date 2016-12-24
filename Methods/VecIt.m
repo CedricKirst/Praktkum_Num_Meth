@@ -14,6 +14,7 @@ lambda1 = x'*A*x;
 while(norm(lambda1-lambda2) > tol && iter<= itermax)
     p = A*x;
     x = p/norm(p);
+    lambda2 = lambda1;
     lambda1 = x'*A*x;
     
     iter = iter+1;

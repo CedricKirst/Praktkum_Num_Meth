@@ -1,6 +1,7 @@
 %Blatt 7
 % Aufgabe 1
 
+tic;
 clc;clear all;close all;
 addpath('Methods');
 r = 0.02;
@@ -31,7 +32,7 @@ end
 
 [ sysmat, rhs ] = assignDBC( sysmat, rhs, dbc );
 
-T = sysmat\rhs;
+T = solveGauss(sysmat,rhs);
 
 figure('Name','Temperaturverteilung Platte');
 quadplot(nodes, elements, T);
@@ -68,7 +69,7 @@ while(kritisch)
 
     [ sysmat, rhs ] = assignDBC( sysmat, rhs, dbc );
 
-    T = sysmat\rhs;
+    T = solveGauss(sysmat,rhs);
     
     kritisch = false;
     for t = 15:18
@@ -83,3 +84,4 @@ figure('Name','Temperaturverteilung Platte Optimiert');
 quadplot(nodes, elements, T);
 grid on;
 grid minor;
+toc;

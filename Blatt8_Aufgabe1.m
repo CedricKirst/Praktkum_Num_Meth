@@ -2,7 +2,7 @@
 %Aufgabe 1
 
 %% initialize
-
+tic;
 clc;clear all;close all;
 
 addpath('Methods');
@@ -53,7 +53,7 @@ for t = 500:dt:5000
     
     [ sysmat, rhs ] = assignDBC( sysmat, rhs, dbc );
 
-    T(:,t/500+1) = sysmat\rhs;
+    T(:,t/500+1) = solveGauss(sysmat,rhs);
     
 end
 
@@ -101,7 +101,7 @@ while(cold)
     
     [ sysmat_s, rhs_s ] = assignDBC( sysmat_s, rhs_s, dbc );
 
-    T_s(:,t_s/dt_s+1) = sysmat_s\rhs_s;
+    T_s(:,t_s/dt_s+1) = solveGauss(sysmat_s,rhs_s);
     
     
     for f = 15:18
@@ -121,3 +121,4 @@ figure('Name','Temperaturverteilung Platte bei T <= 450 K');
 quadplot(nodes, elements, T_s(:, end));
 grid on;
 grid minor;
+toc;
